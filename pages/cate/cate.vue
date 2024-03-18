@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<my-search></my-search>
 		<view class="cate-all">
 			<!-- 左侧 -->
 			<scroll-view scroll-y="true" class="scroll-left" style="height: 100vh;">

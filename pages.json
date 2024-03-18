@@ -43,6 +43,9 @@
 						"navigationBarTitleText" : "",
 						"enablePullDownRefresh" : false
 					}
+				},
+				{
+					"path": "search/search"
 				}
 			]
 		}
