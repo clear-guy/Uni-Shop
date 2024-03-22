@@ -2,6 +2,7 @@
 // #ifndef VUE3
 import Vue from 'vue'
 import App from './App'
+import store from '@/store/store.js'
 // 按需导入 $http 对象
 import { $http } from '@escook/request-miniprogram'
 
@@ -35,7 +36,9 @@ Vue.config.productionTip = false
 
 App.mpType = 'app'
 
+Vue.prototype.$store = store
 const app = new Vue({
+	store,
     ...App
 })
 app.$mount()
@@ -47,7 +50,8 @@ import App from './App.vue'
 export function createApp() {
   const app = createSSRApp(App)
   return {
-    app
+    app,
+	store
   }
 }
 // #endif

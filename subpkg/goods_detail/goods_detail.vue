@@ -35,13 +35,14 @@
 		</view>
 		<!-- 商品导航栏 -->
 		<view class="nav">
-			<uni-goods-nav :fill="true" :options="options" :button-group="buttonGroup" @click="onClick"/>
+			<uni-goods-nav :fill="true" :options="options" :button-group="buttonGroup" @click="onClick" @buttonClick="buttonClick"/>
 		</view>
 		
 	</view>
 </template>
 
 <script>
+	import {mapMutations, mapGetters} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -57,7 +58,6 @@
 				}, {
 					icon: 'cart',
 					text: '购物车',
-					info: 2,
 					infoBackgroundColor: '#007aff',
 					infoColor: "white"
 				}],
@@ -78,6 +78,9 @@
 			this.getGoodsInfo(options.goods_id)
 		},
 		methods: {
+			// 把store里面的cart中的addCart方法引入
+			...mapMutations('cart',['addCart']),
+			
 			// 获取商品详情对象信息
 			async getGoodsInfo(goods_id) {
 				const res = await uni.$http.get('/api/public/v1/goods/detail', {
@@ -106,6 +109,37 @@
 						url: "/pages/cart/cart"
 					})
 				}
+			},
+			// 加入购物车
+			buttonClick(e){
+				if(e.content.text = "加入购物车"){
+					// 组织商品信息对象
+					const goods = {
+						goods_id: this.goods_info.goods_id  ,// 商品id
+						goods_name: this.goods_info.goods_name ,// 商品名称
+						goods_price: this.goods_info.goods_price ,// 商品价格
+						goods_count: 1, // 商品数量
+						goods_small_logo: this.goods_info.goods_small_logo ,// 商品图片
+						goods_state: false // 商品勾选状态
+					}
+					this.addCart(goods)
+				}
+			}
+		},
+		computed:{
+			// 把getters里面的total计算方法引入
+			...mapGetters('cart',['total']),
+		},
+		watch:{
+			// 深度监听
+			total:{
+				handler(newval){
+					const findResult = this.options.find(item => item.text === '购物车')
+					if(findResult){
+						findResult.info = newval
+					}
+				},
+				immediate: true
 			}
 		}
 	}

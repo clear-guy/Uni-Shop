@@ -28,6 +28,7 @@
 </template>
 
 <script>
+	import mixBadge from '@/mixins/tabbar-badge.js'
 	export default {
 		data() {
 			return {
@@ -44,6 +45,8 @@
 		onLoad() {
 			this.getCateList()
 		},
+		// 导入定义的给购物车添加数字徽标的方法
+		mixins:[mixBadge],
 		methods: {
 			async getCateList() {
 				const res = await uni.$http.get('/api/public/v1/categories')
